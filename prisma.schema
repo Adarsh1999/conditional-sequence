@@ -1,0 +1,43 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Question {
+  id          Int             @id
+  title       String
+  description String
+  fields      Field[]
+  modals      String?
+  answers     Answer[]
+  options     QuestionOption[]
+}
+
+model Answer {
+  id         Int      @id @default(autoincrement())
+  answer     String
+  question   Question @relation(fields: [questionId], references: [id])
+  questionId Int
+  field      Field   @relation(fields: [fieldId], references: [id])
+  fieldId    Int
+}
+
+model Field {
+  id      Int      @id
+  type    String   // Field types: mcq, string, number, percentage, boolean
+  answers Answer[]
+  question Question[]
+}
+
+model QuestionOption {
+  id            Int      @id @default(autoincrement())
+  option        String
+  question      Question @relation(fields: [questionId], references: [id])
+  questionId    Int
+  nextQuestion  Question @relation(name: "NextQuestion")
+  nextQuestionId Int?
+}
