@@ -18,7 +18,10 @@ function App() {
       ...prevAnswers,
       [questionId]: selectedOptionId,
     }));
+  };
 
+  const handleNextClick = () => {
+    const selectedOptionId = answers[currentQuestion.id];
     const selectedOption = currentQuestion.options.find(
       (option) => option.id === selectedOptionId
     );
@@ -45,11 +48,11 @@ function App() {
         return (
           <div className="boolean-field">
             <label>
-              <input type="radio" name={questionId} value="true" />
+              <input type="radio" name={questionId} value="true" onChange={handleAnswerChange} />
               True
             </label>
             <label>
-              <input type="radio" name={questionId} value="false" />
+              <input type="radio" name={questionId} value="false" onChange={handleAnswerChange} />
               False
             </label>
           </div>
@@ -87,7 +90,7 @@ function App() {
         {currentQuestion.fields.map((field) =>
           renderInputField(field, currentQuestion.id)
         )}
-        <button className="next-button" onClick={handleAnswerChange}>
+        <button className="next-button" onClick={handleNextClick}>
           Next
         </button>
       </div>
